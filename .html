@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+   
+    <!-Bootstrape->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+<!-Bootstrape->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-script de funcionalidades iniciais->
+<script type="text/javascript" src="../js/scriptinicial.js"></script>
+
+    <style>
+        /* Estilos CSS para o modal, formulário, etc. */
+
+        .modal-active {
+           background-color: rgba(0, 0, 0, 0.5);
+           filter: grayscale(0.8);
+        }
+
+        #modalWindowContainer {
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           height: 100vh; /* Preenche a altura da viewport */
+           /* ... outros estilos ... */
+        }
+
+        #modalWindow {
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           transform: translate(-50%, -50%);
+           /* ... outros estilos ... */
+        }
+input[type="number"][readonly] {
+ background-color: #e9e9e9; /* Cor cinza claro para read-only */
+ border: 1px solid #ccc; /* Borda cinza claro */
+}
+
+input[type="number"]:not([readonly]) {
+ background-color: #fff; /* Cor branca para não read-only */
+ border: 1px solid #ccc; /* Borda cinza claro */
+}
+
+
+input:disabled,
+input[readonly] {
+ background-color: #e9e9e9; /* Cor cinza claro para bloqueados e read-only */
+ border: 1px solid #ccc; /* Borda cinza claro */
+}
+
+input:not(:disabled):not([readonly]) {
+ background-color: #fff; /* Cor branca para inputs habilitados e não read-only */
+ border: 1px solid #ccc; /* Borda cinza claro */
+}
+    </style>
+
+<script>
+const formúlario = 'cad_paises.html';
+ 
+//Função Javascript responsavel futuramente pela liberação dos campos de inserção
+//Somente estara funcional apos a conversão para PHP
+function libereInsercaoAmbiente()
+{
+ajax = iniciaAjax();
+var _Tecla ='I';
+$.ajax({
+type: 'POST',
+   //Comando para carregar o PHP
+   //url: 'view/cad_paises.php',
+url: 'cad_paises.html',
+data: { Versao: '0.1.7',operacao:_Tecla},  
+error: function() {
+alert('Erro ao tentar ação!');
+  },
+success: function(texto) {
+$("#conteudo-pagina-lida").html(texto);
+  },
+
+beforeSend: function( xhr ){
+xhr.setRequestHeader( 'X-Requested-With', 'XMLHttpRequest' );
+}
+});
+}
+
+
+function Pesquisar() {
+ acaoBotao = "P";
+
+ openModal();
+ centerModal();
+ DesabilitaCampos();
+ acaoBotao = "";
+};
+
+function Editar() {
+ acaoBotao = "E";
+
+ DesabilitaCampos();
+ acaoBotao = "";
+};
+
+function Cancelar() {
+ acaoBotao = "E";
+
+ DesabilitaCampos();
+ acaoBotao = "";
+};
+
+//Função de limpeza de campos do formulario
+function LimpaCampos(){
+document.getElementById('id_campo').textContent = '0'; //limpa o codigo ID do formulario
+document.getElementById('pais').value = ''; //limpa o nome do pais
+document.getElementById('trigrama').value = ''; //limpa o trigrama
+}
+    </script>
+
+    <title>Paises</title>
+
+<script>
+   //Inicia nome do arquivo para gravação dos paises
+   const filePath = 'gra_.php'; // Nome do arquivo relacionado a gravação do pais
+           
+
+function GravaPaises(_Tecla)
+{
+ajax = iniciaAjax();
+
+//Lista de campos e valores
+console.log('Variaveis Inicio');
+console.log(_Tecla);
+console.log(document.getElementById('id_campo').textContent);
+console.log(document.getElementById('pais').value);
+console.log(document.getElementById('trigrama').value);
+
+                //Area de testes e validação dos campos antes da gravação
+
+//Função Ajax de direcionameno e gravação
+$.ajax({
+type: 'POST',
+url: filePath, //'gra_paises.php',
+data: { Versao: '0.1.7',
+Operador:'G',
+   SubOperador:_Tecla,
+ID:document.getElementById('id_campo').textContent,
+Pais:document.getElementById('pais').value,
+   Trigrama:document.getElementById('trigrama').value
+ },  
+error: function() {
+alert('Erro ao tentar ação!');
+  },
+success: function(texto) {
+        texto_retorno = TextoUltimaLinhas(texto);
+        //alert(texto_retorno);
+
+        if (VerificarValorNaString(texto_retorno,"Erro ")){
+alert('Erro ao tentar gravar o pais, contate o administrador.');
+console.log(texto_retorno);
+}else{
+alert('Pais Gravado');
+}
+
+  },
+
+beforeSend: function( xhr ){
+xhr.setRequestHeader( 'X-Requested-With', 'XMLHttpRequest' );
+}
+});
+return true;
+
+}
+   //Finaliza a gravação
+
+//  function submitGravaPaises() {
+  function Gravar() {
+         
+ if (acaoBotao === 'I') {
+// Código para incluir dados
+console.log("Incluindo dados...");
+retorno = GravaPaises('I');
+
+ } else if (acaoBotao === 'E') {
+// Código para editar dados
+console.log("Editando dados...");
+retorno = GravaPaises('E');
+
+ } else {
+// Erro
+retorno = false;
+console.error("Erro: Ação do botão não identificada.");
+ 
+ }
+ if (retorno){
+ acaoBotao='';
+ // Desabilita btn_incluir
+ var btnIncluir = document.getElementById('btn_incluir');
+ btnIncluir.disabled = false;
+
+ // Habilita Editar e Gravar
+ var btnEditar = document.getElementById('btn_editar');
+ btnEditar.disabled = true;
+
+ var btnGravar = document.getElementById('btn_gravar');;
+ btnGravar.disabled = true;
+
+ LimpaCampos();
+ // Chama a função para desabilitar campos
+ DesabilitaCampos();
+ acaoBotao = "";
+ }
+};
+
+
+
+function Cancelar() {
+LimpaCampos();
+   DesabilitaCampos();
+   acaoBotao = "C";
+};
+function Sair() {
+LimpaCampos();
+   DesabilitaCampos();
+   acaoBotao = "";
+};
+
+</script>
+
+
+
+</head>
+
+<body>
+     <!--Texto de Cadastro -->
+     <div class="container">
+        <div class="row">
+       <h1>Cadastro de promoção</h1>
+        </div>
+  </div>
+
+     <!-- Inicio de Formulario -->
+     <form  autocomplete="off">
+        <div class="container">
+<!-- Linha-->
+   <div class="row">
+<!--Primeiro Campo-->
+    <div class="col-md-2"><p class="form-group col-md-2" id="id_texto"> Id.: </p></div>
+<div class="col-md-2"><p class="form-group col-md-2" id="id_campo"> 0 </p></div>
+</div>
+<!-- Linha -->
+<div class="row">
+    <div class="form-group col-md-5">
+ <!-- Campo Pais -->
+ <!-- Apresenta o texto / rotulo / label correspondente-->
+                      <label for="pais">Nome da promoção</label>
+ <!-- Coloca o campo para digitação, atenção a informação do "for" deve ser a mesma do "id" do campo abaixo-->
+                      <input type="text" class="form-control" id="pais"
+aria-describedby="paisHelp" placeholder="Descrição da promoção"   minlength="4"  maxlength="100">
+ <!-- informação de Help, o "id" abaixo deve corresponder a propriedade
+                           aria-describedby-->
+                      <small id="paisHelp" class="form-text text-muted">A promoção que foi aprovada pela equipe de Adm</small>
+                 </div>
+</div><div class="row">
+
+  <div class="form-group col-md-5">
+    <!-- Campo Pais -->
+    <!-- Apresenta o texto / rotulo / label correspondente-->
+                         <label for="pais">Valor da promoção</label>
+    <!-- Coloca o campo para digitação, atenção a informação do "for" deve ser a mesma do "id" do campo abaixo-->
+                         <input type="text" class="form-control" id="pais"
+   aria-describedby="paisHelp" placeholder="Taxa/valor percentual"   minlength="4"  maxlength="100">
+    <!-- informação de Help, o "id" abaixo deve corresponder a propriedade
+                              aria-describedby-->
+                         <small id="paisHelp" class="form-text text-muted">A promoção que foi aprovada pela equipe de Adm</small>
+                    </div>
+   </div><div class="row"> 
+
+  <div class="form-group col-md-5">
+<!-- Campo Pais -->
+<!-- Apresenta o texto / rotulo / label correspondente-->
+                    <label for="data">Data de inicio da promoção</label>
+<!-- Coloca o campo para digitação, atenção a informação do "for" deve ser a mesma do "id" do campo abaixo-->
+                    <input type="text" class="form-control" id="pais"
+aria-describedby="paisHelp" placeholder="Data inicial "   minlength="4"  maxlength="100">
+<!-- informação de Help, o "id" abaixo deve corresponder a propriedade
+                         aria-describedby-->
+                    <small id="paisHelp" class="form-text text-muted">A data que foi definida junto com a equipe</small>
+               </div>
+</div>
+
+
+
+<!-- Campo Pais -->
+<!-- Apresenta o texto / rotulo / label correspondente-->
+                    <label for="data">Data final da promoção</label>
+<!-- Coloca o campo para digitação, atenção a informação do "for" deve ser a mesma do "id" do campo abaixo-->
+                    <input type="text" class="form-control" id="pais"
+aria-describedby="paisHelp" placeholder="Data final"   minlength="4"  maxlength="100">
+<!-- informação de Help, o "id" abaixo deve corresponder a propriedade
+                         aria-describedby-->
+                    <small id="paisHelp" class="form-text text-muted">A data que foi definida junto com a equipe</small>
+               </div>
+</div>
+
+
+<div class="form-group col-md-5">
+    <!-- Campo Pais -->
+    <!-- Apresenta o texto / rotulo / label correspondente-->
+                        <label for="data">Pacote por pessoas </label>
+    <!-- Coloca o campo para digitação, atenção a informação do "for" deve ser a mesma do "id" do campo abaixo-->
+                        <input type="number" class="form-control" id="pais" aria-describedby="paisHelp" placeholder="Data inicial "   minlength="9"  maxlength="9">
+    <!-- informação de Help, o "id" abaixo deve corresponder a propriedade
+                             aria-describedby-->
+                        <small id="paisHelp" class="form-text text-muted">A data que foi definida junto com a equipe</small>
+                   </div>
+    </div>
+
+
+
+<div class="row"> <p> </p></div>
+<!--Div relacionada a botões-->
+<div class="row">
+
+               <div class="form-row col-12">
+  <div class="col-1">
+                        <button id="btn_incluir" name="btn_incluir" type="button" class="btn btn-primary col-12">Inserir</button>
+                   </div>
+  <div class="col-1">
+       <button id="btn_editar" name="btn_editar" type="button" class="btn btn-primary col-12">Editar</button>
+                   </div>
+  <div class="col-1">
+
+<button id="btn_gravar" name="btn_gravar"
+type ="button"  class="btn btn-success col-12">Gravar</button>
+
+                   </div>
+  <div class="col-1">
+               <button id="btn_cancelar" type="button" class="btn btn-warning col-12">Cancelar</button>
+                   </div>
+  <div class="col-1">
+                        <button id="btn_pesquisar" type="button" class="btn btn-primary col-12">Pesquisar</button>
+                   </div>
+  <div class="col-1">
+                        <button id="btn_relatorio" type="button" class="btn btn-primary col-12">Relatorio</button>
+                   </div>
+  <div class="col-1">
+                        <button id="btn_sair" name="btn_sair" type="button" class="btn btn-dark col-12">Sair</button>
+  </div
+       </div>
+</div>
+</div>  
+</div>
+ 
+    </form>
+
+<!-Arquivo de funcionalidades iniciais ->
+    <script type="text/javascript" src="../js/scriptinicializacao.js"></script>
+
+    <script>
+var btnIncluir = document.getElementById('btn_incluir');
+ btnIncluir.disabled = true;
+</script>
+
+
+<div id="modalWindowContainer">
+<div id="modalWindow" class="modal">
+        <div class="modal-content">
+          <span id="closeButton" class="close">&times;</span>
+          <div id="modalContent">
+  </div>
+          </div>
+    </div>
+    </div>
+<!-Arquivo de funcionalidades de pesquisa ->
+    <script type="text/javascript" src="../js/scriptmodalpesquisa.js"></script>
+
+
+</body>
+</html><!DOCTYPE html>
+
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+   
+    <!-Bootstrape->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    
+    <!-Bootstrape->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <!-script de funcionalidades iniciais->
+    <script type="text/javascript" src="../js/scriptinicial.js"></script>
+    
+    <style>
+        /* Estilos CSS para o modal, formulário, etc. */
+
+        .modal-active {
+           background-color: rgba(0, 0, 0, 0.5);
+           filter: grayscale(0.8);
+        }
+        
+        #modalWindowContainer {
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           height: 100vh; /* Preenche a altura da viewport */
+           /* ... outros estilos ... */
+        }       
+        
+        #modalWindow {
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           transform: translate(-50%, -50%);
+           /* ... outros estilos ... */
+        }   
+        input[type="number"][readonly] {
+          background-color: #e9e9e9; /* Cor cinza claro para read-only */
+          border: 1px solid #ccc; /* Borda cinza claro */
+        }
+
+        input[type="number"]:not([readonly]) {
+          background-color: #fff; /* Cor branca para não read-only */
+          border: 1px solid #ccc; /* Borda cinza claro */
+        }
+        
+        
+        input:disabled,
+            input[readonly] {
+              background-color: #e9e9e9; /* Cor cinza claro para bloqueados e read-only */
+              border: 1px solid #ccc; /* Borda cinza claro */
+            }
+
+        input:not(:disabled):not([readonly]) {
+              background-color: #fff; /* Cor branca para inputs habilitados e não read-only */
+              border: 1px solid #ccc; /* Borda cinza claro */
+            }
+    </style>
+    
+    <script>
+        const formulario = 'cad_paises.html';
+        
+        //Função Javascript responsavel futuramente pela liberação dos campos de inserção
+        //Somente estara funcional apos a conversão para PHP
+        function libereInsercaoAmbiente()
+        {
+                ajax = iniciaAjax(); 
+                var _Tecla ='I';
+                $.ajax({
+                        type: 'POST',
+                        //Comando para carregar o PHP
+                        //url: 'view/cad_paises.php',
+                        url: 'cad_paises.html',
+                        data: { Versao: '0.1.7',operacao:_Tecla},  
+                        error: function() {
+                                     alert('Erro ao tentar ação!');
+                               },
+                        success: function(texto) { 
+                                     $("#conteudo-pagina-lida").html(texto);
+                               },
+
+                        beforeSend: function( xhr ){
+                            xhr.setRequestHeader( 'X-Requested-With', 'XMLHttpRequest' );
+                        }
+                     });        
+        }
+        
+    
+        function Pesquisar() {
+          acaoBotao = "P";
+
+          openModal();
+          centerModal();
+          DesabilitaCampos();
+          acaoBotao = "";
+        };
+
+        function Editar() {
+          acaoBotao = "E";
+
+          DesabilitaCampos();
+          acaoBotao = "";
+        };
+
+        function Cancelar() {
+          acaoBotao = "E";
+
+          DesabilitaCampos();
+          acaoBotao = "";
+        };
+        
+        //Função de limpeza de campos do formulario
+        function LimpaCampos(){
+            document.getElementById('id_campo').textContent = '0'; //limpa o codigo ID do formulario
+            document.getElementById('pais').value = ''; //limpa o nome do pais
+            document.getElementById('trigrama').value = ''; //limpa o trigrama  
+        }
+    </script>
+
+    <title>Paises</title>
+    
+    <script>
+            //Inicia nome do arquivo para gravação dos paises
+            const filePath = 'gra_paises.php'; // Nome do arquivo relacionado a gravação do pais
+            
+    
+            function GravaPaises(_Tecla)
+            {
+                ajax = iniciaAjax(); 
+                
+                //Lista de campos e valores
+                console.log('Variaveis Inicio');
+                console.log(_Tecla);
+                console.log(document.getElementById('id_campo').textContent);
+                console.log(document.getElementById('pais').value);
+                console.log(document.getElementById('trigrama').value);
+                
+                //Area de testes e validação dos campos antes da gravação
+                
+                //Função Ajax de direcionameno e gravação
+                    $.ajax({
+                            type: 'POST',
+                            url: filePath, //'gra_paises.php',
+                            data: { Versao: '0.1.7',
+                                    Operador:'G',
+                                    SubOperador:_Tecla,
+                                    ID:document.getElementById('id_campo').textContent,
+                                    Pais:document.getElementById('pais').value,
+                                    Trigrama:document.getElementById('trigrama').value
+                                  },  
+                            error: function() {
+                                         alert('Erro ao tentar ação!');
+                                   },
+                            success: function(texto) { 
+                                         texto_retorno = TextoUltimaLinhas(texto);
+                                         //alert(texto_retorno);
+
+                                         if (VerificarValorNaString(texto_retorno,"Erro ")){
+                                             alert('Erro ao tentar gravar o pais, contate o administrador.');
+                                             console.log(texto_retorno);
+                                         }else{
+                                             alert('Pais Gravado');
+                                         }
+                                        
+                                   },
+
+                            beforeSend: function( xhr ){
+                                xhr.setRequestHeader( 'X-Requested-With', 'XMLHttpRequest' );
+                            }
+                         });    
+                    return true;
+                
+            }
+            //Finaliza a gravação
+        
+     //  function submitGravaPaises() {
+       function Gravar() {
+          
+          if (acaoBotao === 'I') {
+            // Código para incluir dados
+            console.log("Incluindo dados...");
+            retorno = GravaPaises('I');
+            
+          } else if (acaoBotao === 'E') {
+            // Código para editar dados
+            console.log("Editando dados...");
+            retorno = GravaPaises('E');
+            
+          } else {
+            // Erro
+            retorno = false;
+            console.error("Erro: Ação do botão não identificada.");
+              
+          }
+          if (retorno){
+              acaoBotao='';
+              // Desabilita btn_incluir
+              var btnIncluir = document.getElementById('btn_incluir');
+              btnIncluir.disabled = false;
+
+              // Habilita Editar e Gravar
+              var btnEditar = document.getElementById('btn_editar');
+              btnEditar.disabled = true;
+
+              var btnGravar = document.getElementById('btn_gravar');;
+              btnGravar.disabled = true;
+
+              LimpaCampos();
+              // Chama a função para desabilitar campos
+              DesabilitaCampos();
+              acaoBotao = "";
+          }
+        };
+    
+        
+
+        function Cancelar() {
+            LimpaCampos();
+            DesabilitaCampos();
+            acaoBotao = "C";
+        };
