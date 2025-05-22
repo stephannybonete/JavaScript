@@ -1,0 +1,91 @@
+/* Estilo básico para tornar o projeto bonito e legível */
+
+/* Define a fonte, cor de fundo, margens e cor do texto da página */
+body {
+    font-family: Arial, sans-serif; /* Usa Arial como fonte principal, com fallback para fontes sem serifa */
+    background-color: #fff9f0;      /* Define uma cor de fundo clara (bege) */
+    margin: 20px;                   /* Adiciona uma margem externa de 20px ao redor da página */
+    padding: 0;                     /* Remove o preenchimento interno padrão */
+    color: #333;                    /* Define a cor do texto como um cinza escuro */
+}
+
+/* Estiliza o título principal da página */
+h1 {
+    text-align: center;            /* Centraliza o texto */
+    color: #b85c38;                /* Define a cor do texto (tom de marrom avermelhado) */
+}
+
+/* Define o layout do formulário */
+form {
+    display: flex;                 /* Usa layout flexível para os elementos internos */
+    flex-wrap: wrap;              /* Permite que os elementos quebrem linha se necessário */
+    gap: 10px;                     /* Espaço entre os elementos do formulário */
+    justify-content: center;      /* Centraliza os itens horizontalmente */
+    margin-bottom: 20px;          /* Espaço inferior entre o formulário e o próximo conteúdo */
+}
+
+/* Estiliza os campos de entrada e botões do formulário */
+form input, form button {
+    padding: 10px;                /* Espaçamento interno para aumentar a área clicável e a legibilidade */
+    font-size: 1em;               /* Define o tamanho da fonte como padrão do elemento base */
+}
+
+/* Estiliza o botão do formulário */
+form button {
+    background-color: #b85c38;    /* Cor de fundo (tom de marrom avermelhado) */
+    color: white;                 /* Cor do texto branca */
+    border: none;                 /* Remove a borda padrão */
+    cursor: pointer;              /* Mostra o cursor de mão ao passar por cima */
+}
+
+/* Estilo para o botão ao passar o mouse por cima */
+form button:hover {
+    background-color: #8c3e1e;    /* Muda a cor de fundo para um tom mais escuro no hover */
+}
+
+/* Estiliza o campo de busca */
+#busca {
+    display: block;               /* Exibe como bloco para permitir centralização */
+    margin: 0 auto 20px auto;     /* Centraliza horizontalmente e adiciona espaço inferior */
+    padding: 10px;                /* Espaçamento interno para conforto na digitação */
+    width: 60%;                   /* Define a largura como 60% do contêiner pai */
+    font-size: 1em;               /* Tamanho da fonte padrão */
+}
+
+/* Estiliza a tabela geral */
+table {
+    width: 100%;                  /* Faz a tabela ocupar toda a largura disponível */
+    border-collapse: collapse;    /* Remove os espaços entre as bordas das células */
+}
+
+/* Estilo para o cabeçalho da tabela */
+thead {
+    background-color: #f4e2d1;    /* Define uma cor de fundo clara para o cabeçalho */
+}
+
+/* Estilo para células de cabeçalho e de dados */
+th, td {
+    padding: 10px;                /* Espaçamento interno nas células */
+    border: 1px solid #ddd;       /* Borda cinza clara nas células */
+    text-align: center;           /* Alinha o conteúdo ao centro */
+}
+
+/* Estiliza os botões de ação (como adicionar/remover) */
+button.acao {
+    padding: 5px 10px;            /* Espaçamento interno menor */
+    margin: 2px;                  /* Espaço ao redor dos botões */
+    border: none;                 /* Remove bordas */
+    cursor: pointer;              /* Cursor de mão ao passar por cima */
+    color: white;                 /* Texto branco */
+    border-radius: 4px;           /* Cantos levemente arredondados */
+}
+
+/* Estilo específico para o botão de adicionar */
+button.adicionar {
+    background-color: #4CAF50;    /* Verde */
+}
+
+/* Estilo específico para o botão de remover */
+button.remover {
+    background-color: #f44336;    /* Vermelho */
+}
