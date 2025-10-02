@@ -1,0 +1,39 @@
+body {
+    background-color: #f8f9fa;
+}
+.kpi-card .card-body {
+    display: flex;
+    align-items: center;
+}
+.kpi-card i {
+    font-size: 2.5rem;
+    margin-right: 1.5rem;
+    opacity: 0.6;
+}
+.card-value {
+    font-size: 2.2rem;
+    font-weight: bold;
+}
+.card-label {
+    font-size: 1rem;
+    color: #6c757d;
+}
+.comment-feed .comment-item {
+    display: flex;
+    padding: 1rem 0;
+    border-bottom: 1px solid #dee2e6;
+}
+.comment-feed .comment-item:last-child {
+    border-bottom: none;
+}
+.comment-feed .source-icon {
+    font-size: 2rem;
+    margin-right: 1rem;
+}
+.comment-feed .bi-google { color: #DB4437; }
+.comment-feed .bi-instagram { color: #e440a5; }
+.comment-feed .bi-facebook { color: #1877F2; }
+.comment-feed .bi-star-fill { color: #ffc107; }
+.sentiment-positive { border-left: 5px solid #198754; }
+.sentiment-neutral { border-left: 5px solid #ffc107; }
+.sentiment-negative { border-left: 5px solid #dc3545; }
